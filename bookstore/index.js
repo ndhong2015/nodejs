@@ -39,9 +39,32 @@ var hbs = expressHbs.create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
+//Body parser middleware
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+//use cookie-parser
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+//use session
+var session = require('express-session');
+app.use(session({
+    cookie:{httpOnly: true, maxAge: 30*24*60*60*1000}, //30 days
+    secret: "S3cret",
+    resave: false,
+    saveUninitialized: false
+}));
+
+//Use cart
+var Cart = require('./controllers/cart');
+app.use(function(req, res, next){
+    var cart = new Cart(req.session.cart ? req.session.cart :{});
+    req.session.cart = cart;
+    res.locals.cartItemCount = cart.totalQuantity();
+    next();
+});
 
 //Define your routes here
  var indexRouter = require('./routes/index');
