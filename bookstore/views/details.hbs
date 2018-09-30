@@ -1,0 +1,81 @@
+<!-- Main -->
+     <!-- Product Details -->
+<div class="container my-3">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="text-center">
+                <img src="{{product.imagepath}}" alt="{{product.name}}" class="img-fluid">
+            </div>
+            <div class="my-4">
+                <div class="book-price pull-left">${{product.price}}</div>
+                <button type="submit" class="btn btn-success pull-right btn-cart-add" data-id="1">Add to cart</button>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h3 class="my-3">{{product.name}}</h3>
+            <p>{{product.summary}}</p>
+            <h3 class="my-3">Book Details</h3>
+            <p>{{product.description}}</p>
+        </div>
+    </div>
+</div>
+<div class="container my-3">
+    <h3>Comments</h3>
+    <form id="form-comment-add" data-product="{{product.id}}">
+        <div class="form-group">
+            <label for="input-comment-add">Add a new comment here</label>
+            <div class="form-row">
+                <div class="col-lg-11 col-md-10">
+                    <input type="text" class="form-control" id="input-comment-add" placeholder="Enter your comment">
+                </div>
+                <div class="col-lg-1 col-md-2">
+                    <button type="submit" class="btn btn-success">Post</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form id="form-comment-edit">
+        <div class="form-group">
+            <label for="input-comment-edit">Edit your comment here</label>
+        <div class="form-row">
+            <div class="col-lg-10 col-md-8">
+                <input type="text" id="input-comment-edit" class="form-control" placeholder="Edit your comment">
+            </div>
+            <input type="hidden" id="input-comment-id">
+            <div class="col-lg-1 col-md-2">
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+            <div class="col-lg-1 col-md-2">
+                <button class="btn btn-secondary" id="btn-comment-cancel">Cancel</button>
+            </div>
+        </div>
+        </div>
+    </form>    
+    <div id="comments">
+        {{#each product.Comments}}
+        <div class="row mx-1 mb-2 p-2  bg-light border-success" style="border-left: 6px solid; border-radius: 3px">
+            <div class="col-10">
+                <p class="text-justify">{{formatDate updatedAt}} - {{comment}}</p>
+            </div>
+            <div class = "col-1 p-1">
+                <button type = "button" class = "btn btn-success btn-sm btn-block btn-comment-edit" data-id="{{id}}" data-comment="{{comment}}">
+                    <i >edit</i> 
+                    {{!-- class= "fa fa-pencil-square-o" --}}
+                </button>                         
+            </div>
+
+            <div class="col-1 p-1">
+                <button type="button" class="btn btn-danger btn-sm btn-block btn-comment-delete" data-id="{{id}}">
+                    <i >delete</i>
+                    {{!-- class="fa fa-trash" --}}
+                </button>
+            </div>            
+        </div>
+        {{/each}}        
+    </div>
+    {{#if hasPagination}}
+    <nav aria-label="Page navigation example">  
+    {{{paginate pagination}}}  
+    </nav>
+    {{/if}}
+</div>

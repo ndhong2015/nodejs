@@ -1,0 +1,23 @@
+<div class="container my-3">
+        <div class="row">
+            {{#each products}}
+            <div class="col-lg-3 col-md-4">
+                <div class="card">
+                    <a href="/products/{{id}}">
+                        <img class="card-img-top" src="{{imagepath}}" alt="">
+                    </a>
+                    <div class="card-body">
+                        <h4 class="card-title">{{name}}</h4>
+                        <p class="card-text">
+                           {{summary}}
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="book-price text-left pull-left">${{price}}</div>
+                        <a href="#" class="btn btn-success btn-sm pull-right">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
