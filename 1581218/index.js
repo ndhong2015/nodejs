@@ -31,6 +31,7 @@ var hbs = expressHbs.create({
     defaultLayout: 'layout',
     layoutsDir: __dirname + '/views/layouts/',
     partialsDir: __dirname + '/views/partials/',
+    usersDir: __dirname + '/views/users/',
     helpers:{
         paginate: paginateHelper.createPagination,
         formatDate: formatDate

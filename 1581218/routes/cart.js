@@ -42,22 +42,58 @@ router.get('/', function(req, res){
 });
 
 router.get('/checkout', function(req, res){
-    res.locals.cart = 'completed';
-    res.locals.checkout = 'active';
-    res.locals.payment = '';
-   res.render('checkout');
+    var cart = req.session.cart;
+    res.locals.items = cart.generateArray();
+    res.locals.totalPrice = cart.totalPrice();
+    
+    res.render('users/checkout');
 });
 
-router.post('/shipping', function(req, res){
-    res.locals.cart = 'completed';
-    res.locals.checkout = 'completed';
-    res.locals.payment = 'active';
-    res.render('payment');
- });
+// router.post('/shipping', function(req, res){
+//     res.locals.cart = 'completed';
+//     res.locals.checkout = 'completed';
+//     res.locals.payment = 'active';
+//     res.render('payment');
+//  });
 
- router.post('/payment', function(req, res){
-    res.render('confirm');
- });
+router.post('/checkout/shipping', function(req, res){
+    var address = {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        phone: req.body.phone,
+        address: req.body.address,
+        state: req.body.state,
+        zip: req.body.zip,
+        country: req.body.country
+    };
+
+    req.session.cart.address = address;
+    
+    var cart = req.session.cart;
+    res.locals.items = cart.generateArray();
+    res.locals.totalPrice = cart.totalPrice();
+    res.render('users/payment'); 
+});
+
+var orderController = require('../controllers/orders');
+
+router.post('/checkout/payment', function(req, res){
+    var paymentMethod = req.body.paymentMethod;
+
+    if (paymentMethod == "COD"){
+        req.session.cart.paymentMethod = paymentMethod;
+        orderController.saveOrder(req.session.cart, function(){
+        res.locals.paymentStatus = "PAYMENT COMPLETE";
+        res.locals.paymentMessage = "Your order has been proceed! Thank you.";
+        res.render('users/confirm');
+        })     
+    } else {
+        res.locals.paymentStatus = "SORRY";
+        res.locals.paymentMessage = "Sorry.";
+        res.render('users/confirm');
+    }
+});
  
  
 module.exports = router;
