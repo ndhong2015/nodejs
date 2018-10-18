@@ -41,7 +41,9 @@ router.get('/', function(req, res){
     res.render('cart');
 });
 
-router.get('/checkout', function(req, res){
+var userController = require('../controllers/users');
+
+router.get('/checkout',userController.isLoggedIn, function(req, res){
     var cart = req.session.cart;
     res.locals.items = cart.generateArray();
     res.locals.totalPrice = cart.totalPrice();
@@ -49,14 +51,7 @@ router.get('/checkout', function(req, res){
     res.render('users/checkout');
 });
 
-// router.post('/shipping', function(req, res){
-//     res.locals.cart = 'completed';
-//     res.locals.checkout = 'completed';
-//     res.locals.payment = 'active';
-//     res.render('payment');
-//  });
-
-router.post('/checkout/shipping', function(req, res){
+router.post('/checkout/shipping',userController.isLoggedIn, function(req, res){
     var address = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -78,12 +73,12 @@ router.post('/checkout/shipping', function(req, res){
 
 var orderController = require('../controllers/orders');
 
-router.post('/checkout/payment', function(req, res){
+router.post('/checkout/payment',userController.isLoggedIn, function(req, res){
     var paymentMethod = req.body.paymentMethod;
 
     if (paymentMethod == "COD"){
         req.session.cart.paymentMethod = paymentMethod;
-        orderController.saveOrder(req.session.cart, function(){
+        orderController.saveOrder(req.session.cart, req.session.user, function(){
         res.locals.paymentStatus = "PAYMENT COMPLETE";
         res.locals.paymentMessage = "Your order has been proceed! Thank you.";
         res.render('users/confirm');

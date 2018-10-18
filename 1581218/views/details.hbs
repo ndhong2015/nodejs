@@ -20,7 +20,8 @@
     </div>
 </div>
 <div class="container my-3">
-    <h3>Comments</h3>
+    <h3>Comments</h3> 
+    {{#if isLoggedIn}}
     <form id="form-comment-add" data-product="{{product.id}}">
         <div class="form-group">
             <label for="input-comment-add">Add a new comment here</label>
@@ -50,13 +51,15 @@
             </div>
         </div>
         </div>
-    </form>    
+    </form>  
+    {{/if}}  
     <div id="comments">
         {{#each product.Comments}}
         <div class="row mx-1 mb-2 p-2  bg-light border-success" style="border-left: 6px solid; border-radius: 3px">
             <div class="col-10">
                 <p class="text-justify">{{formatDate updatedAt}} - {{comment}}</p>
             </div>
+            {{#if ../isLoggedIn}}
             <div class = "col-1 p-1">
                 <button type = "button" class = "btn btn-success btn-sm btn-block btn-comment-edit" data-id="{{id}}" data-comment="{{comment}}">
                     <i class= "fa fa-pencil-square-o"></i> 
@@ -67,7 +70,8 @@
                 <button type="button" class="btn btn-danger btn-sm btn-block btn-comment-delete" data-id="{{id}}">
                     <i class="fa fa-trash"></i>
                 </button>
-            </div>            
+            </div>   
+            {{/if}}         
         </div>
         {{/each}}        
     </div>

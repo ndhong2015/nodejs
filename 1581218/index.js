@@ -57,6 +57,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+//use expressValidator
+var expressValidator = require('express-validator');
+app.use(expressValidator());
 
 //Use cart
 var Cart = require('./controllers/cart');
@@ -64,6 +67,9 @@ app.use(function(req, res, next){
     var cart = new Cart(req.session.cart ? req.session.cart :{});
     req.session.cart = cart;
     res.locals.cartItemCount = cart.totalQuantity();
+
+    res.locals.user = req.session.user;
+    res.locals.isLoggedIn = req.session.user ? true: false;
     next();
 });
 
